@@ -11,14 +11,6 @@ export interface Job {
   id: string;
   title: string;
 }
+export type ApplyStatus = 'idle' | 'loading' | 'success' | 'error'
 
-export interface ApplyToJobRequest {
-  uuid: string;
-  jobId: string;
-  candidateId: string;
-  repoUrl: string;
-}
-
-export interface ApiError {
-    message: string;
-}
+export type AppStep = 'identify' | 'jobs'
