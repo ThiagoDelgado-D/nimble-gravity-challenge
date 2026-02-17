@@ -12,13 +12,13 @@ export interface Job {
   title: string;
 }
 export interface ApplyPayload {
-  uuid: string
-  candidateId: string
-  jobId: string
-  repoUrl: string
+  uuid: string;
+  candidateId: string;
+  applicationId: string;
+  jobId: string;
+  repoUrl: string;
 }
 
+export type ApplyStatus = "idle" | "loading" | "success" | "error";
 
-export type ApplyStatus = 'idle' | 'loading' | 'success' | 'error'
-
-export type AppStep = 'identify' | 'jobs'
+export type AppStep = "identify" | "jobs";
