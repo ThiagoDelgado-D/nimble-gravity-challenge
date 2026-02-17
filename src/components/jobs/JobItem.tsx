@@ -1,9 +1,8 @@
-import { useState } from 'react'
-import { StatusBadge } from '../shared/StatusBadge'
-import type { Job, Candidate, ApplyStatus } from '../../types'
-import { delay } from '../../mocks'
-import { RepoSubmitForm } from './RepoSubmitForm'
 import { JobCardHeader } from './JobCardHeader'
+import { RepoSubmitForm } from './RepoSubmitForm'
+import { StatusBadge } from '../shared/StatusBadge'
+import type { Job, Candidate } from '../../types'
+import { useApply } from '../../hooks/use-apply'
 
 interface Props {
   job: Job
@@ -11,21 +10,17 @@ interface Props {
   index: number
 }
 
+export function JobItem({ job, candidate, index }: Props) {
+  const { status, error, submit } = useApply()
 
-export function JobItem({ job, index }: Props) {
-  const [status, setStatus] = useState<ApplyStatus>('idle')
-  const [error, setError] = useState<string | null>(null)
-
-  async function handleSubmit() {
-    setStatus('loading')
-    setError(null)
-    try {
-      await delay(1200)
-      setStatus('success')
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error desconocido')
-      setStatus('error')
-    }
+  function handleSubmit(repoUrl: string) {
+    submit({
+      uuid: candidate.uuid,
+      candidateId: candidate.candidateId,
+      applicationId: candidate.applicationId,
+      jobId: job.id,
+      repoUrl,
+    })
   }
 
   return (
