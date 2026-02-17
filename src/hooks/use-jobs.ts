@@ -9,8 +9,8 @@ export interface UseJobsReturn {
   error: string | null;
 }
 
-// Se activa automáticamente cuando `enabled` pasa a true.
-// El llamador decide cuándo habilitarlo (ej: cuando el candidato ya fue resuelto).
+// Automatically triggers when `enabled` becomes true.
+// The caller decides when to enable it (e.g., once the candidate has been resolved).
 export function useJobs(enabled: boolean): UseJobsReturn {
   const { data, loading, error, execute } = useAsync<Job[]>(
     getJobs as (...args: unknown[]) => Promise<Job[]>,
