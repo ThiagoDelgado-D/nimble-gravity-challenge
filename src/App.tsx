@@ -1,10 +1,10 @@
-import { useState } from 'react'
-import { Header }    from './components/layout/Header'
-import { Stepper }   from './components/shared/Stepper'
+import { Header } from './components/layout/Header'
+import { Stepper } from './components/shared/Stepper'
 import { EmailForm } from './components/identify/EmailForm'
-import { JobList }   from './components/jobs/JobList'
-import type { Candidate, AppStep } from './types'
-import { MOCK_CANDIDATE, MOCK_JOBS, delay } from './mocks'
+import { JobList } from './components/jobs/JobList'
+import { useCandidate } from './hooks/use-candidate'
+import { useJobs } from './hooks/use-jobs'
+
 
 const STEPS = [
   { label: 'Identificación' },
@@ -13,40 +13,15 @@ const STEPS = [
 ]
 
 export default function App() {
-  const [step, setStep]           = useState<AppStep>('identify')
-  const [candidate, setCandidate] = useState<Candidate | null>(null)
+  const { candidate, loading: candidateLoading, error: candidateError, fetch, reset } = useCandidate()
+  const { jobs, loading: jobsLoading, error: jobsError } = useJobs(candidate !== null)
 
-  const [emailLoading, setEmailLoading] = useState(false)
-  const [emailError, setEmailError]     = useState<string | null>(null)
-
-  async function handleEmailSubmit(email: string) {
-    setEmailLoading(true)
-    setEmailError(null)
-    try {
-      await delay(1000)
-      if (email !== MOCK_CANDIDATE.email) {
-        throw new Error('No encontramos un candidato con ese email.')
-      }
-      setCandidate(MOCK_CANDIDATE)
-      setStep('jobs')
-    } catch (err) {
-      setEmailError(err instanceof Error ? err.message : 'Error desconocido')
-    } finally {
-      setEmailLoading(false)
-    }
-  }
-
-  function handleReset() {
-    setCandidate(null)
-    setStep('identify')
-    setEmailError(null)
-  }
-
+  const step = candidate ? 'jobs' : 'identify'
   const currentStepIndex = step === 'identify' ? 0 : 1
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <Header candidate={candidate} onReset={handleReset} />
+      <Header candidate={candidate} onReset={reset} />
 
       <main className="mx-auto max-w-2xl px-4 py-10">
         <div className="flex justify-center mb-10">
@@ -55,14 +30,14 @@ export default function App() {
 
         {step === 'identify' && (
           <EmailForm
-            onSubmit={handleEmailSubmit}
-            loading={emailLoading}
-            error={emailError}
+            onSubmit={fetch}
+            loading={candidateLoading}
+            error={candidateError}
           />
         )}
 
         {step === 'jobs' && candidate && (
-          <div className="animate-[slide-up_0.35s_ease-out_both]">
+          <div style={{ animation: 'slide-up 0.35s ease-out both' }}>
             <h1 className="text-2xl font-semibold text-slate-900 mb-1.5">
               Posiciones disponibles
             </h1>
@@ -70,9 +45,9 @@ export default function App() {
               Pegá la URL de tu repositorio en la posición que corresponda y enviá tu postulación.
             </p>
             <JobList
-              jobs={MOCK_JOBS}
-              loading={false}
-              error={null}
+              jobs={jobs}
+              loading={jobsLoading}
+              error={jobsError}
               candidate={candidate}
             />
           </div>
