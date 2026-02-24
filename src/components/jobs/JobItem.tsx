@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { JobCardHeader } from './JobCardHeader'
 import { RepoSubmitForm } from './RepoSubmitForm'
 import { StatusBadge } from '../shared/StatusBadge'
@@ -8,10 +9,15 @@ interface Props {
   job: Job
   candidate: Candidate
   index: number
+  onApplied: () => void
 }
 
-export function JobItem({ job, candidate, index }: Props) {
+export function JobItem({ job, candidate, index, onApplied }: Props) {
   const { status, error, submit } = useApply()
+
+  useEffect(() => {
+    if (status === 'success') onApplied()
+  }, [status, onApplied])
 
   function handleSubmit(repoUrl: string) {
     submit({
