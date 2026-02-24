@@ -30,8 +30,8 @@ export async function getJobs(): Promise<Job[]> {
   return request<Job[]>(`${BASE_URL}/api/jobs/get-list`);
 }
 
-export async function applyToJob(payload: ApplyPayload): Promise<void> {
-  return request<void>(`${BASE_URL}/api/candidate/apply-to-job`, {
+export async function applyToJob(payload: ApplyPayload): Promise<{ ok: boolean }> {
+  return request<{ ok: boolean }>(`${BASE_URL}/api/candidate/apply-to-job`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),

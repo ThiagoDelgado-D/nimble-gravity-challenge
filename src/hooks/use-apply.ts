@@ -11,8 +11,8 @@ export interface UseApplyReturn {
 // Derives ApplyStatus from the generic state provided by useAsync.
 // Each JobItem creates its own useApply instance — state is not shared.
 export function useApply(): UseApplyReturn {
-  const { loading, error, data, execute } = useAsync<void>(
-    applyToJob as (...args: unknown[]) => Promise<void>,
+  const { loading, error, data, execute } = useAsync<{ ok: boolean }>(
+    applyToJob as (...args: unknown[]) => Promise<{ ok: boolean }>,
   );
 
   const submit = useCallback(
