@@ -6,9 +6,10 @@ interface Props {
   loading: boolean
   error: string | null
   candidate: Candidate;
+  onApplied: () => void;
 }
 
-export function JobList({ jobs, loading, error, candidate }: Props) {
+export function JobList({ jobs, loading, error, candidate, onApplied }: Props) {
   if (loading) return <JobListSkeleton />
 
   if (error) {
@@ -33,7 +34,7 @@ export function JobList({ jobs, loading, error, candidate }: Props) {
   return (
     <div className="space-y-4">
       {jobs.map((job, i) => (
-        <JobItem key={job.id} job={job} candidate={candidate} index={i} />
+        <JobItem key={job.id} job={job} candidate={candidate} index={i} onApplied={onApplied} />
       ))}
     </div>
   )
