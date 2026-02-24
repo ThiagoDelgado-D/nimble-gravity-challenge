@@ -6,14 +6,14 @@ interface Step {
 
 interface Props {
   steps: Step[]
-  current: number 
+  current: number
 }
 
 export function Stepper({ steps, current }: Props) {
   return (
     <nav aria-label="Progreso" className="flex items-center">
       {steps.map((step, i) => {
-        const done   = i < current
+        const done = i < current
         const active = i === current
 
         return (
@@ -22,8 +22,8 @@ export function Stepper({ steps, current }: Props) {
               <div
                 className={[
                   'h-7 w-7 rounded-full flex items-center justify-center transition-all duration-300',
-                  done   ? 'bg-blue-600 text-white'                    : '',
-                  active ? 'border-2 border-blue-600 bg-blue-50'       : '',
+                  done ? 'bg-blue-600 text-white' : '',
+                  active ? 'border-2 border-blue-600 bg-blue-50' : '',
                   !done && !active ? 'border-2 border-slate-200 bg-white' : '',
                 ].join(' ')}
               >
