@@ -1,12 +1,13 @@
+import { useState } from 'react'
 import { Header } from './components/layout/Header'
 import { Stepper } from './components/shared/Stepper'
 import { EmailForm } from './components/identify/EmailForm'
 import { JobList } from './components/jobs/JobList'
 import { useCandidate } from './hooks/use-candidate'
 import { useJobs } from './hooks/use-jobs'
+import { ConfirmationView } from './components/confirmation/ConfirmationView'
 
-
-const STEPS = [
+const STEPS: { label: string }[] = [
   { label: 'Identificación' },
   { label: 'Posiciones' },
   { label: 'Confirmación' },
@@ -15,9 +16,10 @@ const STEPS = [
 export default function App() {
   const { candidate, loading: candidateLoading, error: candidateError, fetch, reset } = useCandidate()
   const { jobs, loading: jobsLoading, error: jobsError } = useJobs(candidate !== null)
+  const [applied, setApplied] = useState<boolean>(false)
 
   const step = candidate ? 'jobs' : 'identify'
-  const currentStepIndex = step === 'identify' ? 0 : 1
+  const currentStepIndex: number = step === 'identify' ? 0 : applied ? 2 : 1
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -36,7 +38,7 @@ export default function App() {
           />
         )}
 
-        {step === 'jobs' && candidate && (
+        {step === 'jobs' && candidate && !applied && (
           <div style={{ animation: 'slide-up 0.35s ease-out both' }}>
             <h1 className="text-2xl font-semibold text-slate-900 mb-1.5">
               Posiciones disponibles
@@ -49,8 +51,13 @@ export default function App() {
               loading={jobsLoading}
               error={jobsError}
               candidate={candidate}
+              onApplied={() => setApplied(true)}
             />
           </div>
+        )}
+
+        {step === 'jobs' && candidate && applied && (
+          <ConfirmationView />
         )}
       </main>
     </div>
