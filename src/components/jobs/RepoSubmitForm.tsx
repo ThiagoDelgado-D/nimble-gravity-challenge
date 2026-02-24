@@ -8,12 +8,11 @@ interface Props {
 }
 
 export function RepoSubmitForm({ jobId, isLoading, onSubmit }: Props) {
-    const GITHUB_URL_PREFIX = 'https://github.com/'
-    const [repoUrl, setRepoUrl] = useState('')
+    const [repoUrl, setRepoUrl] = useState('');
 
-    const isValidUrl = repoUrl.trim().startsWith(GITHUB_URL_PREFIX)
-    const showUrlError = repoUrl.length > 0 && !isValidUrl
-    const canSubmit = isValidUrl && !isLoading
+    const trimmedRepoUrl = repoUrl.trim();
+
+    const canSubmit = trimmedRepoUrl.length > 0 && !isLoading
 
     return (
         <div className="space-y-3">
@@ -23,31 +22,25 @@ export function RepoSubmitForm({ jobId, isLoading, onSubmit }: Props) {
           className="flex items-center gap-1.5 text-xs font-medium text-slate-500 mb-1.5"
         >
           <IconGithub className="h-3.5 w-3.5" />
-          URL del repositorio en GitHub
+          Repositorio en GitHub
         </label>
 
         <input
           id={`repo-${jobId}`}
-          type="url"
+          type="text"
           value={repoUrl}
           onChange={(e) => setRepoUrl(e.target.value)}
-          placeholder="https://github.com/usuario/mi-repo"
+          placeholder="usuario/mi-repo"
           disabled={isLoading}
           className={[
             'w-full rounded-lg border px-3.5 py-2.5 text-sm font-mono',
             'placeholder:text-slate-300 text-slate-800',
             'outline-none transition-all',
             'focus:ring-2 focus:ring-blue-500 focus:border-blue-500',
-            showUrlError ? 'border-red-300 bg-red-50' : 'border-slate-200 bg-slate-50',
-            isLoading    ? 'opacity-60 cursor-not-allowed' : '',
+            'border-slate-200 bg-slate-50',
+            isLoading ? 'opacity-60 cursor-not-allowed' : '',
           ].join(' ')}
         />
-
-        {showUrlError && (
-          <p className="mt-1.5 text-xs text-red-600">
-            La URL debe comenzar con <span className="font-mono">{GITHUB_URL_PREFIX}</span>
-          </p>
-        )}
       </div>
 
       <button
