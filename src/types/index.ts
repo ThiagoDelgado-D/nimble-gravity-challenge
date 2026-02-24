@@ -21,4 +21,8 @@ export interface ApplyPayload {
 
 export type ApplyStatus = "idle" | "loading" | "success" | "error";
 
+export interface Step {
+  label: string;
+}
+
 export type AppStep = "identify" | "jobs";

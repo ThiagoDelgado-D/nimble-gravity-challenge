@@ -1,8 +1,5 @@
 import { IconCheck } from './Icon'
-
-interface Step {
-  label: string
-}
+import type { Step } from '../../types'
 
 interface Props {
   steps: Step[]

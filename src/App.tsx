@@ -6,8 +6,9 @@ import { JobList } from './components/jobs/JobList'
 import { useCandidate } from './hooks/use-candidate'
 import { useJobs } from './hooks/use-jobs'
 import { ConfirmationView } from './components/confirmation/ConfirmationView'
+import type { Step } from './types'
 
-const STEPS: { label: string }[] = [
+const STEPS: Step[] = [
   { label: 'Identificación' },
   { label: 'Posiciones' },
   { label: 'Confirmación' },
