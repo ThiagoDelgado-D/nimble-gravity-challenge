@@ -20,13 +20,12 @@ export function useApply(): UseApplyReturn {
     [execute],
   );
 
-  // applyToJob returns void → data is set to undefined (not null) on success.
-  // null = initial state | error. undefined = successful execution of a void function.
+  // status derives from server response: ok=true → success
   const status: ApplyStatus = loading
     ? "loading"
     : error !== null
       ? "error"
-      : data !== null
+      : data?.ok === true
         ? "success"
         : "idle";
 
